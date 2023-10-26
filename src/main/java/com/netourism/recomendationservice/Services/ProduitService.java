@@ -1,7 +1,5 @@
 package com.netourism.recomendationservice.Services;
 
-import com.netourism.recomendationservice.Models.Produit;
-import com.netourism.recomendationservice.Repositories.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
