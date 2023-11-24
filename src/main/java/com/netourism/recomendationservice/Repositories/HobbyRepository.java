@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface HobbyRepository extends Neo4jRepository<Hobby,Long> {
     Hobby findByTitle(String title);
+    Boolean existsByTitle(String title);
     @Query("MATCH (u:User {userId: $userId})-[:practice]->(h:Hobby) RETURN h")
     List<Hobby> findHobbiesByUserId(Long userId);
 }

@@ -20,11 +20,21 @@ public class RecommendationController {
     public List<Hobby> getAllHobbies(){
     return hobbyRepository.findAll();
 }
-@PostMapping("/add")
-    public Hobby addHobby(@RequestBody Hobby a){
-    hobbyRepository.save(a);
-    return a;
-}
+    @PostMapping("/add")
+    public Hobby addHobby(@RequestBody Hobby a) {
+        if (!hobbyRepository.existsByTitle(a.getTitle())) {
+            hobbyRepository.save(a);
+            return a;
+
+        } else {
+            Hobby existingHobby = hobbyRepository.findByTitle(a.getTitle());
+            List<User> existingPracticers = existingHobby.getPracticers();
+            existingPracticers.addAll(a.getPracticers());
+            existingHobby.setPracticers(existingPracticers);
+            hobbyRepository.save(existingHobby);
+            return existingHobby;
+        }
+    }
 @GetMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteHobby(@PathVariable(value = "id") Long id){
     hobbyRepository.deleteById(id);
