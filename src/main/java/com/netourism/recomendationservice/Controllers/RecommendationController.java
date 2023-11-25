@@ -20,7 +20,7 @@ public class RecommendationController {
     public List<Hobby> getAllHobbies(){
     return hobbyRepository.findAll();
 }
-    @PostMapping("/add")
+    @PostMapping("/add-hobby")
     public Hobby addHobby(@RequestBody Hobby a) {
         if (!hobbyRepository.existsByTitle(a.getTitle())) {
             hobbyRepository.save(a);
@@ -30,6 +30,19 @@ public class RecommendationController {
             Hobby existingHobby = hobbyRepository.findByTitle(a.getTitle());
             List<User> existingPracticers = existingHobby.getPracticers();
             existingPracticers.addAll(a.getPracticers());
+            existingHobby.setPracticers(existingPracticers);
+            hobbyRepository.save(existingHobby);
+            return existingHobby;
+        }
+    }
+    @PostMapping("/add-user-to-hobby/{title}")
+    public Hobby addUserToHobby(@RequestBody List<User> a,@PathVariable(value = "title") String title) {
+        if (!hobbyRepository.existsByTitle(title)) {
+             return null;
+        } else {
+            Hobby existingHobby = hobbyRepository.findByTitle(title);
+            List<User> existingPracticers = existingHobby.getPracticers();
+            existingPracticers.addAll(a);
             existingHobby.setPracticers(existingPracticers);
             hobbyRepository.save(existingHobby);
             return existingHobby;
